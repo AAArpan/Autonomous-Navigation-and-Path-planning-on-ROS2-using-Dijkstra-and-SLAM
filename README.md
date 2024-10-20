@@ -16,10 +16,12 @@ sudo apt update
 sudo apt install ros-humble-turtlebot3* ros-humble-slam-toolbox
 export TUTRTLEBOT3_MODEL=burger
 ```
+Create a world on Gazebo and save it. Copy and paste the path in turtlebot3_world.launch.py
+
 # RUN THE PROJECT
 1. Launch the custom world map on Gazebo
 ```bash
-ros2 launch
+ros2 launch turtlbot3_custom turtlebot3_world.launch.py use_sim_time:=true
 ```
 2. RUN SLAM to create a 2-D MAP
 We have to move the TurtleBot all over the map to create a precise 2-D map. 
@@ -27,9 +29,11 @@ We have to move the TurtleBot all over the map to create a precise 2-D map.
 ros2 launch slam_toolbox online_async_launch.py use_sim_time:=true
 ros2 run my_py_pkg robot_command_publishrer
 ```
+![Screenshot from 2024-10-14 23-12-48](https://github.com/user-attachments/assets/112703c8-2de6-49a5-bca8-c99359f14e4e)
+
 3. RVIZ for Visualization
 ```bash
-hello
+ros2 launch nav2_bringup rviz_launch.py
 ```
 4. Save the Map
 Once the mapping is complete, save the map:
@@ -42,6 +46,8 @@ This will create two files my_custom_map.pgm and my_custom_map.yaml
 ```bash
 python3 Dijkstra.py
 ```
+![Maze_screenshot_14 10 2024](https://github.com/user-attachments/assets/52563786-cafd-4636-b2c8-9f245052819f)
+
 Click on any 2 points on the map and you'll get the shortest path 
 
 6. Run the Navigation Stack
@@ -49,6 +55,9 @@ Click on any 2 points on the map and you'll get the shortest path
 ros2 launch turtlebot3_navigation2 navigation2.launch.py map:=/path/to/my_custom_map.yaml use_sim_time:=true
 ```
 Launch Rviz and select the map topic to visualize the bot and the 2D map. Choose the same two points as before, and you will observe the bot navigating along the predicted path while efficiently avoiding obstacles.
+
+![Screenshot from 2024-10-14 23-11-46](https://github.com/user-attachments/assets/92059459-7d7c-43dd-8a09-3bb97ee2b463)
+
 # How the Custom Dijkstra Algorithm Work
 1. Map to Grid Conversion: The environment map is converted into a 2D grid where each cell is a node.
 2. Graph Representation: The grid is treated as a graph with adjacent cells connected as neighbors.
